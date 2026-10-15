@@ -13,7 +13,8 @@
   ],
   "author": "deekshith shetty",
   "license": "ISC",
-  "dependencies": {
-    "nodemon": "^3.0.1"
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "prettier": "^3.9.10"
   }
 }
