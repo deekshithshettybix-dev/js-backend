@@ -4,6 +4,7 @@ import { User } from '../models/user.model.js'
 import {uploadToCloudinary} from '../utils/cloudinary.js'
 import {ApiResponse} from '../utils/ApiResponse.js'
 import jwt from "jsonwebtoken"
+import mongoose from "mongoose"
 
 
 const generateAccessAndRefreshTokens = async(userId)=>{
@@ -298,7 +299,7 @@ const getUserChannelProfile = asyncHandler(async(req,res)=>{
       $lookup:{
         from: "subscriptions",
         localField: "_id",
-        forignField: "channel",
+        foreignField: "channel",
         as: "subscribers"
       }
     },
@@ -306,7 +307,7 @@ const getUserChannelProfile = asyncHandler(async(req,res)=>{
       $lookup:{
         from: "subscriptions",
         localField: "_id",
-        forignField: "subscriber",
+        foreignField: "subscriber",
         as: "subscribedTo"
       }
     },
@@ -367,19 +368,21 @@ const getWatchHistory = asyncHandler(async(req,res)=>{
         as: "watchHistory",
         pipeline:[
           {
-            $lookup: "users",
-            localField: "owner",
-            foreignField: "_id",
-            as: "owner",
-            pipeline:[
-              {
-                $project:{
-                  fullName: 1,
-                  username: 1,
-                  avatar: 1
+            $lookup:{
+              from: "users",
+              localField: "owner",
+              foreignField: "_id",
+              as: "owner",
+              pipeline:[
+                {
+                  $project:{
+                    fullName: 1,
+                    username: 1,
+                    avatar: 1
+                  }
                 }
-              }
-            ]
+              ]
+          }
           },
           {
             $addFields:{

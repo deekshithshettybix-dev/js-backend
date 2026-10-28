@@ -17,7 +17,7 @@ app.use(cookieParser());
 
 //routes imports
 import userRoutes from "./routes/user.routes.js";
-import channelRoutes from "./routes/channel.routes.js";
+// import channelRoutes from "./routes/channel.routes.js";
 
 
 
