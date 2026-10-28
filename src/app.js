@@ -17,10 +17,12 @@ app.use(cookieParser());
 
 //routes imports
 import userRoutes from "./routes/user.routes.js";
+import channelRoutes from "./routes/channel.routes.js";
 
 
 
 //routes declaration
 app.use("/api/v1/users",userRoutes);
+// app.use("/api/v1/channel",channelRoutes);
 
 export {app};
