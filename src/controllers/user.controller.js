@@ -33,7 +33,7 @@ const registeruser = asyncHandler(async (req, res) => {
      if(
         [fullName, email, username, password].some((field)=>field?.trim() === "")
      ){
-        throw new ApiError(400, "Full name is required");
+        throw new ApiError(400, "'fullName, email, username, password' all fields are required");
      }
 
      const avatarFile = req.files?.avatar?.[0];
