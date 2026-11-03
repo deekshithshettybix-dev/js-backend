@@ -24,11 +24,12 @@ const createTweet = asyncHandler(async (req, res) => {
 const getUserTweets = asyncHandler(async (req, res) => {
     // TODO: get user tweets
     const { userId } = req.params
+    const {page = 1, limit = 10} = req.query
 
     if (!isValidObjectId(userId)) {
         throw new ApiError(400, "Invalid userId")
     }
-    const tweets = Tweet.aggregate([
+    const aggrigation = Tweet.aggregate([
         {
             $match: { owner: new mongoose.Types.ObjectId(userId) }
         },
@@ -53,6 +54,12 @@ const getUserTweets = asyncHandler(async (req, res) => {
             $sort: { createdAt: -1 }
         }
     ])
+    const tweets = await Tweet.aggregatePaginate(aggrigation,
+        {
+            page:Number(page),
+            limit:Number(limit)
+        }
+    )
     return res.status(200).json(new ApiResponse(200, tweets, "User tweets fetched successfully"))
 })
 

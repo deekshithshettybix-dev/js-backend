@@ -36,12 +36,12 @@ const getAllVideos = asyncHandler(async (req, res) => {
              {
                 $lookup:{
                     from: "users",
-                    localfield:"owner",
+                    localField:"owner",
                     foreignField:"_id",
                     as:"owner",
                     pipeline:[
                         {
-                            $object:{
+                            $project:{
                                 fullName:1,
                                 username:1,
                                 avatar:1
@@ -161,9 +161,18 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
 
 const updateView = asyncHandler(async (req, res) => {
     const { videoId } = req.params
+    const userId = req.user?._id
     const video = await Video.findById(videoId)
     video.views = video.views + 1
     await video.save()
+    await User.findByIdAndUpdate(
+        userId,
+        {
+            $addToSet: {
+                watchHistory: videoId
+            }
+        }
+    );
     return res.status(200).json(new ApiResponse(200,video,"video view updated successfully"))
 })
 
