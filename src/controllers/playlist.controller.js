@@ -34,6 +34,7 @@ const getPlaylistById = asyncHandler(async (req, res) => {
         select: "title description thumbnail"
     })
     //TODO: get playlist by id
+    return res.status(200).json(new ApiResponse(200, playlist, "Playlist fetched successfully"))
 })
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
@@ -67,7 +68,7 @@ const deletePlaylist = asyncHandler(async (req, res) => {
     if(!playlist){
         throw new ApiError(404, "Playlist not found")
     }
-    await playlist.remove()
+    await playlist.deleteOne()
     return res.status(200).json(new ApiResponse(200, null, "Playlist deleted successfully"))
     // TODO: delete playlist
 })
